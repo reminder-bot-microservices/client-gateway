@@ -20,6 +20,15 @@ import { PaginationDto } from 'src/common/dtos';
 export class RemindersController {
   constructor(@Inject(NATS_SERVICE) private readonly natsClient: ClientProxy) {}
 
+  @Post('/seed')
+  seeder() {
+    return this.natsClient.emit('remindersSeed', {}).pipe(
+      catchError((err) => {
+        throw new RpcException(err);
+      }),
+    );
+  }
+
   @Post()
   create(@Body() createReminderDto: CreateReminderDto) {
     return this.natsClient.send('createReminder', createReminderDto).pipe(
