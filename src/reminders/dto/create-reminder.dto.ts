@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -14,12 +15,14 @@ export class CreateReminderDto {
   title: string;
 
   @IsDate()
+  @Type(() => Date)
   date_to_remind: Date;
 
   @IsNumber({ allowNaN: false })
   @IsPositive()
   @IsOptional()
   @Min(0)
+  @Type(() => Number)
   early_reminder?: number;
 
   @IsOptional()
@@ -32,5 +35,5 @@ export class CreateReminderDto {
 
   @IsOptional()
   @IsString()
-  extra_information?: string;
+  description?: string;
 }

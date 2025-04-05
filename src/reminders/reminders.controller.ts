@@ -8,6 +8,7 @@ import {
   Delete,
   Inject,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CreateReminderDto } from './dto/create-reminder.dto';
 import { UpdateReminderDto } from './dto/update-reminder.dto';
@@ -48,7 +49,7 @@ export class RemindersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.natsClient.send('findOneReminder', { id }).pipe(
       catchError((err) => {
         throw new RpcException(err);
@@ -58,20 +59,21 @@ export class RemindersController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
-    @Body() updateReminderDto: UpdateReminderDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateReminderDto: Partial<UpdateReminderDto>,
   ) {
-    return this.natsClient
-      .send('updateReminder', { ...updateReminderDto, id })
-      .pipe(
-        catchError((err) => {
-          throw new RpcException(err);
-        }),
-      );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: __, ...data } = updateReminderDto;
+    const reminderData: Partial<UpdateReminderDto> = { ...data, id };
+    return this.natsClient.send('updateReminder', reminderData).pipe(
+      catchError((err) => {
+        throw new RpcException(err);
+      }),
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.natsClient.send('removeReminder', { id }).pipe(
       catchError((err) => {
         throw new RpcException(err);
