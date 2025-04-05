@@ -16,7 +16,7 @@ export class RpcCustomExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const rpcError: unknown = exception.getError();
-    console.log(rpcError);
+
     if (typeof rpcError === 'object') {
       const error: IrpcError = rpcError!['error'] || rpcError;
       const errorKeys = Object.keys(error);
