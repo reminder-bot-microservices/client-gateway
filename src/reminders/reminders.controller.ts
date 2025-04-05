@@ -62,14 +62,13 @@ export class RemindersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateReminderDto: Partial<UpdateReminderDto>,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id: __, ...data } = updateReminderDto;
-    const reminderData: Partial<UpdateReminderDto> = { ...data, id };
-    return this.natsClient.send('updateReminder', reminderData).pipe(
-      catchError((err) => {
-        throw new RpcException(err);
-      }),
-    );
+    return this.natsClient
+      .send('updateReminder', { id, ...updateReminderDto })
+      .pipe(
+        catchError((err) => {
+          throw new RpcException(err);
+        }),
+      );
   }
 
   @Delete(':id')
