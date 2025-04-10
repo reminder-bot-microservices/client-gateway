@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsPositive } from 'class-validator';
+import { IsNumber, IsPositive, IsString } from 'class-validator';
+import type { TFiltersRange } from '../types';
 
 export class PaginationDto {
   @IsPositive()
@@ -11,4 +12,9 @@ export class PaginationDto {
   @IsNumber()
   @Type(() => Number)
   limit?: number = 10;
+}
+
+export class RemindersQueriesDto extends PaginationDto {
+  @IsString()
+  range?: TFiltersRange = 'week';
 }
