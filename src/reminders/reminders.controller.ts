@@ -10,12 +10,11 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CreateReminderDto } from './dto/create-reminder.dto';
-import { UpdateReminderDto } from './dto/update-reminder.dto';
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError } from 'rxjs';
-import { PaginationDto } from 'src/common/dtos';
+import { RemindersQueriesDto } from 'src/common/dtos';
+import { CreateReminderDto, UpdateReminderDto } from './dto';
 
 @Controller('reminders')
 export class RemindersController {
@@ -40,8 +39,8 @@ export class RemindersController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.natsClient.send('findAllReminders', paginationDto).pipe(
+  findAll(@Query() queries: RemindersQueriesDto) {
+    return this.natsClient.send('findAllReminders', queries).pipe(
       catchError((err) => {
         throw new RpcException(err);
       }),
