@@ -13,8 +13,8 @@ import {
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError } from 'rxjs';
-import type { RemindersQueriesDto } from 'src/common/dtos';
-import type { CreateReminderDto, UpdateReminderDto } from './dto';
+import { RemindersQueriesDto } from 'src/common/dtos';
+import { CreateReminderDto, UpdateReminderDto } from './dto';
 
 @Controller('reminders')
 export class RemindersController {

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsPositive, IsString } from 'class-validator';
 import type { TFiltersRange } from '../types';
 
 export class PaginationDto {
@@ -17,4 +17,8 @@ export class PaginationDto {
 export class RemindersQueriesDto extends PaginationDto {
   @IsString()
   range?: TFiltersRange = 'week';
+
+  @IsBoolean()
+  @Type(() => Boolean)
+  completed?: boolean = false;
 }
